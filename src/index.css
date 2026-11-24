@@ -1,0 +1,214 @@
+@import 'tailwindcss';
+
+/*
+ * NeuroPath design tokens.
+ * Monochrome only: black, white and six greys. Every colour, radius and
+ * shadow outside this set is removed from Tailwind so it cannot be used.
+ * The only shadows are white glows, used for warnings and the copyright.
+ */
+@theme {
+  --color-*: initial;
+  --color-black: #000000;
+  --color-g1: #121212; /* raised surfaces */
+  --color-g2: #1f1f1f; /* hairline rules */
+  --color-g3: #333333; /* strong rules, inactive tracks */
+  --color-g4: #5c5c5c; /* disabled text, minor ticks */
+  --color-g5: #8a8a8a; /* secondary text */
+  --color-g6: #bdbdbd; /* primary body text */
+  --color-white: #ffffff; /* values, active state, inversion */
+
+  --radius-*: initial;
+  --radius-xs: 1px;
+  --radius-sm: 2px;
+  --shadow-*: initial;
+  /* White glows, reserved for warnings and the copyright line. */
+  --shadow-glow: 0 0 0 1px rgba(255, 255, 255, 0.9), 0 0 16px 2px rgba(255, 255, 255, 0.45);
+  --shadow-glow-sm: 0 0 10px 1px rgba(255, 255, 255, 0.35);
+  --inset-shadow-*: initial;
+  --drop-shadow-*: initial;
+  --blur-*: initial;
+
+  --font-*: initial;
+  --font-sans: 'Archivo', 'Helvetica Neue', Arial, sans-serif;
+  --font-mono: 'IBM Plex Mono', ui-monospace, 'SFMono-Regular', Menlo, monospace;
+
+  --text-2xs: 10px;
+  --text-2xs--line-height: 14px;
+  --text-xs: 11px;
+  --text-xs--line-height: 16px;
+  --text-sm: 12px;
+  --text-sm--line-height: 18px;
+  --text-base: 13px;
+  --text-base--line-height: 20px;
+
+  --ease-out: cubic-bezier(0.2, 0, 0, 1);
+}
+
+@layer base {
+  html,
+  body,
+  #root {
+    height: 100%;
+  }
+  body {
+    margin: 0;
+    background: var(--color-black);
+    color: var(--color-g6);
+    font-family: var(--font-sans);
+    font-size: var(--text-base);
+    line-height: var(--text-base--line-height);
+    font-feature-settings: 'ss01';
+    -webkit-font-smoothing: antialiased;
+    overflow: hidden;
+  }
+  ::selection {
+    background: var(--color-white);
+    color: var(--color-black);
+  }
+  :focus-visible {
+    outline: 1px solid var(--color-white);
+    outline-offset: 1px;
+  }
+  button {
+    cursor: pointer;
+  }
+  button:disabled {
+    cursor: not-allowed;
+  }
+}
+
+@layer components {
+  /* Section headers: uppercase with tracking, the only place caps appear. */
+  .eyebrow {
+    font-size: var(--text-2xs);
+    line-height: var(--text-2xs--line-height);
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    font-weight: 600;
+    color: var(--color-g5);
+  }
+
+  .text-glow {
+    text-shadow:
+      0 0 6px rgba(255, 255, 255, 0.85),
+      0 0 14px rgba(255, 255, 255, 0.4);
+  }
+
+  .num {
+    font-family: var(--font-mono);
+    font-variant-numeric: tabular-nums;
+    letter-spacing: 0;
+  }
+
+  /* Diagonal hatching for caution / intersection, drawn with an SVG tile (no gradients). */
+  .hatch {
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='6' height='6'%3E%3Cpath d='M-1 1l2-2M0 6l6-6M5 7l2-2' stroke='%23ffffff' stroke-width='1'/%3E%3C/svg%3E");
+  }
+  .hatch-dense {
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='4' height='4'%3E%3Cpath d='M-1 1l2-2M0 4l4-4M3 5l2-2' stroke='%23ffffff' stroke-width='1'/%3E%3C/svg%3E");
+  }
+
+  /* Range input: 1px track, square thumb. */
+  .range {
+    -webkit-appearance: none;
+    appearance: none;
+    width: 100%;
+    height: 16px;
+    background: transparent;
+    margin: 0;
+    cursor: pointer;
+  }
+  .range::-webkit-slider-runnable-track {
+    height: 1px;
+    background: var(--color-g3);
+  }
+  .range::-moz-range-track {
+    height: 1px;
+    background: var(--color-g3);
+  }
+  .range::-moz-range-progress {
+    height: 1px;
+    background: var(--color-white);
+  }
+  .range::-webkit-slider-thumb {
+    -webkit-appearance: none;
+    width: 9px;
+    height: 9px;
+    margin-top: -4px;
+    background: var(--color-black);
+    border: 1px solid var(--color-white);
+    border-radius: 0;
+    transition: background-color 120ms var(--ease-out);
+  }
+  .range::-moz-range-thumb {
+    width: 9px;
+    height: 9px;
+    background: var(--color-black);
+    border: 1px solid var(--color-white);
+    border-radius: 0;
+  }
+  .range:hover::-webkit-slider-thumb,
+  .range:active::-webkit-slider-thumb {
+    background: var(--color-white);
+  }
+  .range:hover::-moz-range-thumb,
+  .range:active::-moz-range-thumb {
+    background: var(--color-white);
+  }
+  .range:focus-visible {
+    outline: none;
+  }
+  .range:focus-visible::-webkit-slider-thumb {
+    outline: 1px solid var(--color-white);
+    outline-offset: 2px;
+  }
+
+  /* Hide number spinners; values are edited by typing or the paired slider. */
+  .numfield::-webkit-outer-spin-button,
+  .numfield::-webkit-inner-spin-button {
+    -webkit-appearance: none;
+    margin: 0;
+  }
+  .numfield {
+    -moz-appearance: textfield;
+    appearance: textfield;
+  }
+
+  .scroll-quiet {
+    scrollbar-width: thin;
+    scrollbar-color: var(--color-g3) transparent;
+  }
+}
+
+/* Touch screens: larger slider thumbs and hit area. Unlayered, so it beats utilities. */
+@media (pointer: coarse) {
+  .range {
+    height: 32px;
+  }
+  .range::-webkit-slider-thumb {
+    width: 20px;
+    height: 20px;
+    margin-top: -10px;
+  }
+  .range::-moz-range-thumb {
+    width: 20px;
+    height: 20px;
+  }
+}
+
+/* Phones: 16px form text so iOS Safari does not zoom in when a field gets focus. */
+@media (max-width: 767px) {
+  input:not([type='range']),
+  select,
+  textarea {
+    font-size: 16px;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    transition-duration: 0ms !important;
+  }
+}
