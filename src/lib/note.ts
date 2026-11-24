@@ -30,7 +30,7 @@ export function buildNote(plan: Plan, a: Assessment, now: Date, info?: CaseInfo)
   const rule = '-'.repeat(64)
 
   const lines: string[] = [
-    'NEUROPATH 3D - PRE-OPERATIVE TRAJECTORY NOTE (SIMULATION)',
+    'STEREON - TRAJECTORY SIMULATION NOTE (EDUCATIONAL ONLY)',
     rule,
     `Generated:        ${formatTimestamp(now)}`,
     'Frame:            RAS, millimetres, origin at brain centre',
